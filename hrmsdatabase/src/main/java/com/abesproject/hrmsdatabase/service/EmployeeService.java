@@ -1,17 +1,50 @@
 package com.abesproject.hrmsdatabase.service;
 
+import com.abesproject.hrmsdatabase.model.Employee;
+import com.abesproject.hrmsdatabase.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-@Service 
+import java.util.List;
+import java.util.Optional;
+
+@Service
 public class EmployeeService {
-    @Autowired 
+
+    @Autowired
     private EmployeeRepository employeeRepository;
-    
-    public String createNewEmployee(){
-        Employee emp1=new Employee(emp_id:2001, emp_name:"John", stack:"Java");
-        employeeRepository.save(emp1);
-        return "Employee created successfully";
+
+    public String createNewEmployee(Employee employee) {
+        employeeRepository.save(employee);
+        return "Employee added successfully";
+    }
+
+    public List<Employee> getAllEmployee() {
+        return employeeRepository.findAll();
+    }
+
+    public Optional<Employee> getById(long id) {
+        return employeeRepository.findById(id);
+    }
+
+    public String deletebyid(long id) {
+        employeeRepository.deleteById(id);
+        return "Deleted successfully";
+    }
+
+    public String deleteall() {
+        employeeRepository.deleteAll();
+        return "All records deleted";
     }
     
+    public Employee login(String email, String password) {
+        Optional<Employee> optionalEmp = employeeRepository.findByEmail(email);
+        if (optionalEmp.isPresent()) {
+            Employee emp = optionalEmp.get();
+            if (emp.getPassword() != null && emp.getPassword().equals(password)) {
+                return emp; // Success: return employee object
+            }
+        }
+        return null; // Invalid credentials
+    }
 }

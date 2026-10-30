@@ -1,8 +1,11 @@
 package com.abesproject.hrmsdatabase.repository;
 
+import com.abesproject.hrmsdatabase.model.Employee;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+import java.util.Optional;
 
-@Repository 
-public class EmployeeRepository  {
-    
+@Repository
+public interface EmployeeRepository extends JpaRepository<Employee, Long> {
+    Optional<Employee> findByEmail(String email);
 }
